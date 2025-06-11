@@ -1,0 +1,25 @@
+# Object files
+*.o
+*.obj
+
+# Executable binary
+Matt_daemon
+
+# Build directory
+/build/
+
+# Log and lock files (runtime-generated)
+*.log
+/var/log/matt_daemon/
+/var/lock/matt_daemon.lock
+
+# MacOS system files
+.DS_Store
+
+# Temporary files
+*~
+*.swp
+*.tmp
+
+# Makefile-generated cleanups
+*.dSYM/
