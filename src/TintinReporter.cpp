@@ -12,6 +12,7 @@
 TintinReporter::TintinReporter() {
     mkdir(LOG_PATH, 0755);
     openLogFile();
+
 }
 
 TintinReporter::~TintinReporter() {
