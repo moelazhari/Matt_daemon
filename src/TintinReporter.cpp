@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 #define LOG_PATH "/var/log/matt_daemon/"
 #define LOG_FILE "/var/log/matt_daemon/matt_daemon.log"
@@ -18,7 +19,7 @@ TintinReporter::~TintinReporter() {
 }
 
 void TintinReporter::openLogFile() {
-    log_fd = open(LOG_FILE, O_WRONLY | O_CREAT | O_APPEND, 0644);
+    log_fd = open(LOG_FILE, O_WRONLY | O_CREAT | O_APPEND, 0777);
 }
 
 void TintinReporter::closeLogFile() {

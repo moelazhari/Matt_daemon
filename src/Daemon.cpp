@@ -20,14 +20,16 @@ void handle_signal(int signum) {
 }
 
 void Daemon::run() {
-    // if (getuid() != 0) {
-    //     std::cerr << "Daemon must be run as root." << std::endl;
-    //     exit(1);
-    // }
+    if (getuid() != 0) {
+        std::cerr << "Daemon must be run as root." << std::endl;
+        exit(1);
+    }
 
     int lock_fd = open(LOCK_FILE, O_CREAT | O_RDWR, 0644);
     if (lock_fd < 0 || flock(lock_fd, LOCK_EX | LOCK_NB) < 0) {
         std::cerr << "Can't open or lock " << LOCK_FILE << std::endl;
+        TintinReporter::getInstance().log("ERROR", "Matt_daemon: Error file locked.");
+        TintinReporter::getInstance().log("INFO", "Matt_daemon: Quitting.");
         exit(1);
     }
 

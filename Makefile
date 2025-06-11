@@ -3,27 +3,27 @@ GREEN=\033[0;32m
 PURPLE=\033[0;35m
 
 NAME = Matt_daemon
-CC = c++
-FLAGS = -Wall -Wextra -Werror -std=c++98
+CC = g++
+FLAGS = -Wall -Wextra -Werror
 
 INCLUDES = includes
 
 SRC_DIR = src
 B_DIR = build
 
-FILES = main Deamon Server TintinReporter
+FILES = main Daemon Server TintinReporter
 SRCS = $(addprefix $(SRC_DIR)/, $(FILES:=.cpp))
 OBJS = $(addprefix $(B_DIR)/, $(FILES:=.o))
 
 all: $(NAME)
 
-$(B_DIR)/%.o: $(SRC_DIR)/%.cpp $(INCLUDES)
+$(B_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@mkdir -p $(@D)
 	@$(CC) $(FLAGS) -I$(INCLUDES) -c $< -o $@
 	@echo "$(GREEN)Compiling $<"
 
 $(NAME): $(OBJS)
-	@$(CC) $(FLAGS) $(OBJS) -o $(NAME)
+	@$(CC) $(FLAGS) $(OBJS) -o $(NAME) -lpthread
 	@echo "$(PURPLE)Built $(NAME) successfully."
 
 clean:

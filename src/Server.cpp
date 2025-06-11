@@ -20,7 +20,11 @@ void handle_client(int client_socket) {
         buffer[bytes] = '\0';
 
         std::string msg = buffer;
-        if (msg == "quit\n" || msg == "quit\r\n") break;
+        if (msg == "quit\n" || msg == "quit\r\n") {
+            TintinReporter::getInstance().log("INFO", "Matt_daemon: Request quit");
+            TintinReporter::getInstance().log("INFO", "Quitting");
+            exit(0);
+        }
 
         TintinReporter::getInstance().log("LOG", "User input: " + msg);
     }
