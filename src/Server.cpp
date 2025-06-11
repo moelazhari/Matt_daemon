@@ -26,7 +26,7 @@ void handle_client(int client_socket) {
             exit(0);
         }
 
-        TintinReporter::getInstance().log("LOG", "User input: " + msg);
+        TintinReporter::getInstance().log("LOG", "User input: " + (msg[bytes - 1] == '\n' ? msg.substr(0, bytes - 1) : msg));
     }
     close(client_socket);
 }
@@ -48,6 +48,7 @@ void Server::start() {
 
     TintinReporter::getInstance().log("INFO", "Matt_daemon: Server created.");
     TintinReporter::getInstance().log("INFO", "Matt_daemon: Entering Daemon mode.");
+    TintinReporter::getInstance().log("INFO", "Matt_daemon: Starting PID: " + std::to_string(getpid()) + ".");
 
     std::vector<std::thread> clients;
 
