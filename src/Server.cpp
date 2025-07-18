@@ -1,7 +1,6 @@
 #include "Server.hpp"
 
-
-void handle_client(int client_socket) {
+void Server::handle_client(int client_socket) {
     char buffer[BUFFER_SIZE];
     while (true) {
         ssize_t bytes = recv(client_socket, buffer, BUFFER_SIZE - 1, 0);
@@ -18,6 +17,7 @@ void handle_client(int client_socket) {
         Tintin_reporter::getInstance().log("LOG", "User input: " + (msg[bytes - 1] == '\n' ? msg.substr(0, bytes - 1) : msg));
     }
     close(client_socket);
+    active_clients--;
 }
 
 void Server::start() {
@@ -39,19 +39,17 @@ void Server::start() {
     Tintin_reporter::getInstance().log("INFO", "Matt_daemon: Entering Daemon mode.");
     Tintin_reporter::getInstance().log("INFO", "Matt_daemon: Starting PID: " + std::to_string(getpid()) + ".");
 
-    std::vector<std::thread> clients;
-
     while (true) {
         int client_socket = accept(server_fd, nullptr, nullptr);
         if (client_socket < 0) continue;
 
-        if (clients.size() >= MAX_CLIENTS) {
+        if (active_clients >= MAX_CLIENTS) {
             close(client_socket);
             continue;
         }
 
-        clients.emplace_back(handle_client, client_socket);
-        clients.back().detach();
+        active_clients++;
+        std::thread(&Server::handle_client, this, client_socket).detach();
     }
 
     close(server_fd);
