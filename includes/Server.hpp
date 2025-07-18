@@ -16,6 +16,13 @@
 class Server {
 public:
     void start();
+
+    Server() = default;
+    ~Server() = default;
+    Server(const Server&) = delete;
+    Server& operator=(const Server&) = delete;
+
+
 };
 
 #endif
