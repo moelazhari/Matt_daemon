@@ -11,7 +11,7 @@ INCLUDES = includes
 SRC_DIR = src
 B_DIR = build
 
-FILES = main Daemon Server TintinReporter
+FILES = main Daemon Server Tintin_reporter
 SRCS = $(addprefix $(SRC_DIR)/, $(FILES:=.cpp))
 OBJS = $(addprefix $(B_DIR)/, $(FILES:=.o))
 

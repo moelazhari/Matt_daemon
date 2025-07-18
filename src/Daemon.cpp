@@ -1,20 +1,10 @@
 #include "Daemon.hpp"
-#include "TintinReporter.hpp"
-#include "Server.hpp"
-#include <csignal>
-#include <fstream>
-#include <iostream>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/file.h>
-#include <sys/types.h>
 
 static const char* LOCK_FILE = "/var/lock/matt_daemon.lock";
 
 void handle_signal(int signum) {
-    TintinReporter::getInstance().log("INFO", "Signal handler: Signal " + std::to_string(signum));
-    TintinReporter::getInstance().log("INFO", "Quitting.");
+    Tintin_reporter::getInstance().log("INFO", "Signal handler: Signal " + std::to_string(signum));
+    Tintin_reporter::getInstance().log("INFO", "Quitting.");
     std::remove(LOCK_FILE);
     exit(0);
 }
@@ -28,8 +18,8 @@ void Daemon::run() {
     int lock_fd = open(LOCK_FILE, O_CREAT | O_RDWR, 0644);
     if (lock_fd < 0 || flock(lock_fd, LOCK_EX | LOCK_NB) < 0) {
         std::cerr << "Can't open or lock " << LOCK_FILE << std::endl;
-        TintinReporter::getInstance().log("ERROR", "Matt_daemon: Error file locked.");
-        TintinReporter::getInstance().log("INFO", "Matt_daemon: Quitting.");
+        Tintin_reporter::getInstance().log("ERROR", "Matt_daemon: Error file locked.");
+        Tintin_reporter::getInstance().log("INFO", "Matt_daemon: Quitting.");
         exit(1);
     }
 
@@ -45,8 +35,8 @@ void Daemon::run() {
     close(STDOUT_FILENO);
     close(STDERR_FILENO);
 
-    TintinReporter::getInstance().log("INFO", "Matt_daemon: Started.");
-    TintinReporter::getInstance().log("INFO", "Matt_daemon: Creating server.");
+    Tintin_reporter::getInstance().log("INFO", "Matt_daemon: Started.");
+    Tintin_reporter::getInstance().log("INFO", "Matt_daemon: Creating server.");
 
     signal(SIGTERM, handle_signal);
     signal(SIGINT, handle_signal);

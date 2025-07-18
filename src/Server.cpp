@@ -1,16 +1,5 @@
 #include "Server.hpp"
-#include "TintinReporter.hpp"
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <unistd.h>
-#include <thread>
-#include <vector>
-#include <cstring>
 
-#define PORT 4242
-#define MAX_CLIENTS 3
-#define BUFFER_SIZE 1024
 
 void handle_client(int client_socket) {
     char buffer[BUFFER_SIZE];
@@ -21,12 +10,12 @@ void handle_client(int client_socket) {
 
         std::string msg = buffer;
         if (msg == "quit\n" || msg == "quit\r\n") {
-            TintinReporter::getInstance().log("INFO", "Matt_daemon: Request quit");
-            TintinReporter::getInstance().log("INFO", "Quitting");
+            Tintin_reporter::getInstance().log("INFO", "Matt_daemon: Request quit");
+            Tintin_reporter::getInstance().log("INFO", "Quitting");
             exit(0);
         }
 
-        TintinReporter::getInstance().log("LOG", "User input: " + (msg[bytes - 1] == '\n' ? msg.substr(0, bytes - 1) : msg));
+        Tintin_reporter::getInstance().log("LOG", "User input: " + (msg[bytes - 1] == '\n' ? msg.substr(0, bytes - 1) : msg));
     }
     close(client_socket);
 }
@@ -34,7 +23,7 @@ void handle_client(int client_socket) {
 void Server::start() {
     int server_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (server_fd == -1) {
-        TintinReporter::getInstance().log("ERROR", "Socket creation failed.");
+        Tintin_reporter::getInstance().log("ERROR", "Socket creation failed.");
         return;
     }
 
@@ -46,9 +35,9 @@ void Server::start() {
     bind(server_fd, (struct sockaddr*)&address, sizeof(address));
     listen(server_fd, MAX_CLIENTS);
 
-    TintinReporter::getInstance().log("INFO", "Matt_daemon: Server created.");
-    TintinReporter::getInstance().log("INFO", "Matt_daemon: Entering Daemon mode.");
-    TintinReporter::getInstance().log("INFO", "Matt_daemon: Starting PID: " + std::to_string(getpid()) + ".");
+    Tintin_reporter::getInstance().log("INFO", "Matt_daemon: Server created.");
+    Tintin_reporter::getInstance().log("INFO", "Matt_daemon: Entering Daemon mode.");
+    Tintin_reporter::getInstance().log("INFO", "Matt_daemon: Starting PID: " + std::to_string(getpid()) + ".");
 
     std::vector<std::thread> clients;
 
